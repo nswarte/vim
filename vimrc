@@ -39,6 +39,7 @@ let &t_te.="\e[0 q"
 
 " Mappings for escaping insert and visual mode
 :inoremap jk <esc>
+:vnoremap ;; <esc>
 :nnoremap <leader>S :setlocal hlsearch!<cr>
 " Mapping for upper case of word in insert mode and normal mode
 inoremap <leader><c-u> <Esc>viwUea
@@ -55,6 +56,7 @@ vnoremap <leader>' <esc>`<i'<esc>`>a'<esc>
 :noremap <C-n> :NERDTreeToggle<CR>
 :let g:ctrlp_cmd='CtrlPBuffer'
 :let g:netrw_list_hide= '.*\~$'
+:let g:netrw_banner=0
 :let g:ctrlp_working_path_mode = 'c'
 " :let g:netrw_keepdir=0
 
@@ -65,6 +67,8 @@ vnoremap <leader>' <esc>`<i'<esc>`>a'<esc>
 " Mappings for windows manipulation
 :nnoremap <leader>wo <c-w>o
 :nnoremap <leader>ww <c-w>w
+:nnoremap <leader>wj <c-w>j
+:nnoremap <leader>wk <c-w>k
 :nnoremap <leader>wW <c-w>W
 :nnoremap <leader>wc <c-w>c
 
@@ -164,3 +168,11 @@ augroup filetype_java
 	autocmd FileType java :setlocal expandtab
 augroup END
 
+augroup filetype_cpp
+	autocmd!
+	autocmd FileType cpp :setlocal nowrap
+	autocmd FileType cpp :setlocal shiftwidth=4
+	autocmd FileType cpp :setlocal tabstop=4
+	autocmd FileType cpp :setlocal softtabstop=4
+	autocmd FileType cpp :setlocal expandtab
+augroup END
