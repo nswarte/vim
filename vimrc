@@ -6,20 +6,41 @@ set nocompatible
 call pathogen#infect()
 call togglebg#map("<F5>")
 
+" Backup options
+set nobackup
+
 " Display Option
+set colorcolumn=120
 set title
 set number
 set ruler
-set wrap
+set nowrap
 set scrolloff=3
 set rnu
-set completeopt=menu,longest
+set laststatus=2
+
+" mintty terminal cursor setting
+let &t_ti.="\e[1 q"
+let &t_SI.="\e[5 q"
+let &t_EI.="\e[1 q"
+let &t_te.="\e[0 q"
 
 " Search Options
 set ignorecase
 set smartcase
 set incsearch
-set nohlsearch
+" set nohlsearch
+nnoremap <leader>* /jk<cr>
+
+" wild menu
+set wildmenu
+
+" set path
+set path+=**
+
+" netrw options
+let g:netrw_banner=0
+let g:netrw_hide=1
 
 " Bell
 set visualbell
@@ -31,63 +52,37 @@ set hidden
 " Mappings
 :let mapleader=","
 
-" Cursor in terminal mode
-let &t_ti.="\e[1 q"
-let &t_SI.="\e[5 q"
-let &t_EI.="\e[1 q"
-let &t_te.="\e[0 q"
-
 " Mappings for escaping insert and visual mode
-:inoremap jk <esc>
-:vnoremap ;; <esc>
-:nnoremap <leader>S :setlocal hlsearch!<cr>
+:imap jk <Esc>
+:vmap ;; <Esc>
+
 " Mapping for upper case of word in insert mode and normal mode
 inoremap <leader><c-u> <Esc>viwUea
 nnoremap <leader><c-u> viwUe
 
-" Mapping for quoting text
-nnoremap <leader>" e<esc>a"<esc>hbi"<esc>lel
-nnoremap <leader>' e<esc>a'<esc>hbi'<esc>lel
-vnoremap <leader>" <esc>`<i"<esc>`>a"<esc>
-vnoremap <leader>' <esc>`<i'<esc>`>a'<esc>
+nnoremap <space> <c-^>
 
-" Specifics to plugins
-" Mapping for toggling nerdTree
-:noremap <C-n> :NERDTreeToggle<CR>
-:let g:ctrlp_cmd='CtrlPBuffer'
-:let g:netrw_list_hide= '.*\~$'
-:let g:netrw_banner=0
-:let g:ctrlp_working_path_mode = 'c'
-" :let g:netrw_keepdir=0
+" mapping to enter visual block mode
+nnoremap <leader>v <c-v>
 
 " Mapping for editing vimrc
 :nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 :nnoremap <leader>sv :source $MYVIMRC<cr>
 
-" Mappings for windows manipulation
-:nnoremap <leader>wo <c-w>o
-:nnoremap <leader>ww <c-w>w
-:nnoremap <leader>wj <c-w>j
-:nnoremap <leader>wk <c-w>k
-:nnoremap <leader>wW <c-w>W
-:nnoremap <leader>wc <c-w>c
+" Mapping for quicklist
+:nnoremap <leader>o :copen<cr>
+:nnoremap <leader>c :cclose<cr>
 
-" Mapping for navigating in file
+" Mapping for moving
 :nnoremap <leader>f <c-f>
 :nnoremap <leader>b <c-b>
-:nnoremap <leader>c ggdG
+:nnoremap <leader>d <c-d>
 
-" Mapping for finding
-:nnoremap <leader>g :exe "grep /s /x \"<cWORD>\"" getcwd() . "\\*"<cr>
+" Mappings for windows moves
+:nnoremap <leader>w <c-w>
 
-" Mappings based of tags
-nnoremap <leader>ts :execute "tselect" expand("<cword>")<cr>
-
-" Mappings for folding block
-nnoremap <leader>zf zfa{
-
-" Mappings for exploring
-nnoremap <leader>E :Explore<cr> Iiii
+" Mapping to display Explorer
+nnoremap <leader>E :Explore<cr>
 
 " Syntax Coloration
 syntax enable
@@ -96,83 +91,105 @@ filetype on
 filetype plugin on
 filetype indent on
 
+"CtrlP settings
+let g:ctrlp_working_path_mode='ra'
+let g:ctrlp_cmd = 'CtrlPBuffer'
+let g:ctrlp_match_window = 'results:100'
+let g:ctrlp_custom_ignore = {
+			\ 'dir': '\v[\/](node_modules|target|dist\>)',
+			\ 'file': '(\..*[~])$',
+			\ }
+
+" alternate buffer
+nnoremap <tab> <c-^>
+
+" YCM settings
+let g:ycm_auto_trigger=0
+nnoremap <leader>g :YcmCompleter GoToDefinition<cr>
+nnoremap <leader>h :YcmCompleter GoToReferences<cr>
+
 " Colors
 set background=dark
 colorscheme solarized
-set guifont=Consolas:h11
+set guifont=Consolas:h10
 set antialias
 
-
-"set diffexpr=MyDiff()
-"function MyDiff()
-  "let opt = '-a --binary '
-  "if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-  "if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-  "let arg1 = v:fname_in
-  "if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-  "let arg2 = v:fname_new
-  "if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-  "let arg3 = v:fname_out
-  "if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-  "let eq = ''
-  "if $VIMRUNTIME =~ ' '
-    "if &sh =~ '\<cmd'
-      "let cmd = '""' . $VIMRUNTIME . '\diff"'
-      "let eq = '"'
-    "else
-      "let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-    "endif
-  "else
-  "  let cmd = $VIMRUNTIME . '\diff'
-  "endif
-  "silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
-" endfunction
-
-" Autocommands for filetypes
-" HTML
+" Autocommands for various filetypes
+augroup filetype_yaml
+	autocmd!
+	autocmd FileType yaml,conf :setlocal nowrap
+	autocmd FileType yaml,conf :setlocal shiftwidth=2
+	autocmd FileType yaml,conf :setlocal tabstop=2
+	autocmd FileType yaml,conf :setlocal softtabstop=2
+	autocmd FileType yaml,conf :setlocal expandtab
+	autocmd FileType yaml,conf :setlocal foldmethod=indent
+augroup END
+augroup filetype_ts
+	autocmd!
+	autocmd filetype typescript :setlocal foldmethod=syntax
+	autocmd filetype typescript :execute "normal zr"
+augroup end
+augroup filetype_js
+	autocmd!
+	autocmd FileType javascript,json,typescript :setlocal nowrap
+	autocmd FileType javascript,json,typescript :setlocal shiftwidth=2
+	autocmd FileType javascript,json,typescript :setlocal tabstop=2
+	autocmd FileType javascript,json,typescript :setlocal softtabstop=2
+	autocmd FileType javascript,json,typescript :setlocal expandtab
+augroup END
+augroup filetype_c_cpp
+	autocmd!
+	autocmd FileType c,cpp :setlocal tabstop=4
+	autocmd FileType c,cpp :setlocal foldmethod=syntax
+	autocmd FileType c,cpp :setlocal softtabstop=4
+	autocmd FileType c,cpp :setlocal shiftwidth=4
+augroup END
+augroup filetype_xml
+	autocmd!
+	autocmd FileType xml :setlocal nowrap
+	autocmd FileType xml :setlocal shiftwidth=2
+	autocmd FileType xml :setlocal tabstop=2
+	autocmd FileType xml :setlocal softtabstop=2
+	autocmd FileType xml :setlocal expandtab
+augroup END
 augroup filetype_html
 	autocmd!
 	autocmd FileType html :setlocal nowrap
-	autocmd FileType html :setlocal shiftwidth=4
-	autocmd FileType html :setlocal tabstop=4
-	autocmd FileType html :setlocal softtabstop=4
+	autocmd FileType html :setlocal shiftwidth=2
+	autocmd FileType html :setlocal tabstop=2
+	autocmd FileType html :setlocal softtabstop=2
 	autocmd FileType html :setlocal expandtab
 augroup END
 
-augroup filetype_javascript
+augroup help
 	autocmd!
-	autocmd FileType javascript,json,java,xml,yaml :setlocal nowrap
-	autocmd FileType javascript,json,java,xml,yaml :setlocal shiftwidth=2
-	autocmd FileType javascript,json,java,xml,yaml :setlocal tabstop=2
-	autocmd FileType javascript,json,java,xml,yaml :setlocal softtabstop=2
-	autocmd FileType javascript,json,java,xml,yaml :setlocal expandtab
+	autocmd FileType help :nnoremap <buffer> <enter> <c-]>
 augroup END
 
-augroup filetype_cs
-	autocmd!
-	autocmd FileType cs :setlocal nowrap
-	autocmd FileType cs :setlocal shiftwidth=4
-	autocmd FileType cs :setlocal tabstop=4
-	autocmd FileType cs :setlocal softtabstop=4
-	autocmd FileType cs :setlocal expandtab
-	autocmd FileType cs :nnoremap <buffer> gd :OmniSharpGotoDefinition<cr>
-	autocmd FileType cs :nnoremap <buffer> gm :OmniSharpFindMembers<cr>
-augroup END
+set switchbuf +=useopen
 
-augroup filetype_java
-	autocmd!
-	autocmd FileType java :setlocal nowrap
-	autocmd FileType java :setlocal shiftwidth=4
-	autocmd FileType java :setlocal tabstop=4
-	autocmd FileType java :setlocal softtabstop=4
-	autocmd FileType java :setlocal expandtab
-augroup END
+" set diffexpr=MyDiff()
+function MyDiff()
+  let opt = '-a --binary '
+  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+  let arg1 = v:fname_in
+  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+  let arg2 = v:fname_new
+  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+  let arg3 = v:fname_out
+  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+  let eq = ''
+  if $VIMRUNTIME =~ ' '
+    if &sh =~ '\<cmd'
+      let cmd = '""' . $VIMRUNTIME . '\diff"'
+      let eq = '"'
+    else
+      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+    endif
+  else
+    let cmd = $VIMRUNTIME . '\diff'
+  endif
+  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+endfunction
 
-augroup filetype_cpp
-	autocmd!
-	autocmd FileType cpp :setlocal nowrap
-	autocmd FileType cpp :setlocal shiftwidth=4
-	autocmd FileType cpp :setlocal tabstop=4
-	autocmd FileType cpp :setlocal softtabstop=4
-	autocmd FileType cpp :setlocal expandtab
-augroup END
