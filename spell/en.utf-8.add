@@ -1,2 +1,15 @@
 thirdparty
 thirdparty
+HTML5
+TypeScript
+Webpack
+npx
+webpack
+npx webpack serve --devtool source-map
+frontend
+CommonJS
+http://bucav70-112.em.health.ge.com:8081/?host=3.249.14.124&store=edison&study=1.2.840.113619.2.248.90581109614.19449.1236780341647.6
+http://bucav70-112.em.health.ge.com:8081/?host=3.249.14.124&store=edison&study=1.2.840.113619.2.248.90581109614.19449.1236780341647.6
+DICOM
+getTokenFn
+backend
