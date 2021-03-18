@@ -115,6 +115,10 @@ set guifont=Consolas:h10
 set antialias
 
 " Autocommands for various filetypes
+augroup filetype_md
+	autocmd!
+	autocmd FileType markdown :setlocal tw=120
+augroup END
 augroup filetype_yaml
 	autocmd!
 	autocmd FileType yaml,conf :setlocal nowrap
